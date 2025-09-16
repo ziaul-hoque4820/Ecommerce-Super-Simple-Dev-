@@ -1,7 +1,41 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { formatCurrency, getProductImageUrl, getRatingImageUrl } from '../utils/utils'
+import { ProductContext } from '../context/productContext';
 
 function ProductCart({ product }) {
+    const { cartData, setCartData } = useContext(ProductContext);
+    const [selectedQuantity, setSelectedQuantity] = useState(1);
+
+    const handleAddToCart = (productId) => {
+        const matchingProduct = cartData.find(item => item.productId === productId);
+
+        let updatedCart;
+        if (matchingProduct) {
+            // Update existing product quantity
+            updatedCart = cartData.map(item =>
+                item.productId === productId
+                    ? { ...item, quantity: item.quantity + selectedQuantity }
+                    : item
+            );
+        } else {
+            // Add new product with quantity and deliveryOption
+            updatedCart = [
+                ...cartData,
+                {
+                    productId: productId,
+                    quantity: selectedQuantity,
+                    deliveryOptionId: '1'
+                }
+            ];
+        }
+
+        // Update Context 
+        setCartData(updatedCart);
+
+    };
+    console.log(cartData);
+
+
     return (
         <div
             className="product-container">
@@ -27,17 +61,15 @@ function ProductCart({ product }) {
             </div>
 
             <div className="product-quantity-container">
-                <select>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
+                <select
+                    value={selectedQuantity}
+                    onChange={(e) => setSelectedQuantity(Number(e.target.value))}
+                >
+                    {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
+                        <option key={n} value={n}>
+                            {n}
+                        </option>
+                    ))}
                 </select>
             </div>
 
@@ -48,7 +80,9 @@ function ProductCart({ product }) {
                 Added
             </div>
 
-            <button className="add-to-cart-button button-primary">
+            <button
+                onClick={() => handleAddToCart(product.id)}
+                className="add-to-cart-button button-primary">
                 Add to Cart
             </button>
         </div>
