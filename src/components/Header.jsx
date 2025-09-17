@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from '../assets/images/logo-white.png'
 import logoMobile from '../assets/images/mobile-logo-white.png'
 import searchIcon from '../assets/images/icons/search-icon.png'
 import cartIcon from '../assets/images/icons/cart-icon.png'
+import { ProductContext } from '../context/productContext'
 
 
 function Header() {
+    const { cartData } = useContext(ProductContext);
     return (
         <div className="header">
             <div className="left-section">
@@ -33,7 +35,12 @@ function Header() {
 
                 <a className="cart-link header-link" href="checkout.html">
                     <img className="cart-icon" src={cartIcon} />
-                    <div className="cart-quantity">3</div>
+                    <div className="cart-quantity">
+                        {cartData.length > 0 ?
+                            cartData.reduce((total, item) => total + item.quantity, 0) :
+                            0
+                        }
+                    </div>
                     <div className="cart-text">Cart</div>
                 </a>
             </div>

@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { formatCurrency, getProductImageUrl, getRatingImageUrl } from '../utils/utils'
 import { ProductContext } from '../context/productContext';
+import checkmarkIcon from '../assets/images/icons/checkmark.png'
 
 function ProductCart({ product }) {
     const { cartData, setCartData } = useContext(ProductContext);
     const [selectedQuantity, setSelectedQuantity] = useState(1);
+    const [isAdded, setIsAdded] = useState(false)
 
     const handleAddToCart = (productId) => {
         const matchingProduct = cartData.find(item => item.productId === productId);
@@ -32,8 +34,14 @@ function ProductCart({ product }) {
         // Update Context 
         setCartData(updatedCart);
 
+        // Reset selectedQuantity back to 1
+        setSelectedQuantity(1);
+
+        // Show "Added" messege temporarily 
+        setIsAdded(true);
+        setTimeout(() => setIsAdded(false), 700);
+
     };
-    console.log(cartData);
 
 
     return (
@@ -75,8 +83,8 @@ function ProductCart({ product }) {
 
             <div className="product-spacer"></div>
 
-            <div className="added-to-cart">
-                <img src="images/icons/checkmark.png" />
+            <div className={`added-to-cart ${isAdded ? 'show' : 'hide'}`}>
+                <img src={checkmarkIcon} />
                 Added
             </div>
 
