@@ -4,6 +4,7 @@ import logoMobile from '../assets/images/mobile-logo-white.png'
 import searchIcon from '../assets/images/icons/search-icon.png'
 import cartIcon from '../assets/images/icons/cart-icon.png'
 import { ProductContext } from '../context/productContext'
+import { Link } from 'react-router-dom'
 
 
 function Header() {
@@ -11,12 +12,12 @@ function Header() {
     return (
         <div className="header">
             <div className="left-section">
-                <a href="index.html" className="header-link">
+                <Link to={"/home"} className="header-link">
                     <img className="logo"
                         src={logo} />
                     <img className="mobile-logo"
                         src={logoMobile} />
-                </a>
+                </Link>
             </div>
 
             <div className="middle-section">
@@ -28,12 +29,11 @@ function Header() {
             </div>
 
             <div className="right-section">
-                <a className="orders-link header-link" href="orders.html">
-
+                <Link to={"/orders"} className="orders-link header-link">
                     <span className="orders-text">Orders</span>
-                </a>
+                </Link>
 
-                <a className="cart-link header-link" href="checkout.html">
+                <Link to={"/checkout"} className="cart-link header-link">
                     <img className="cart-icon" src={cartIcon} />
                     <div className="cart-quantity">
                         {cartData.length > 0 ?
@@ -42,7 +42,7 @@ function Header() {
                         }
                     </div>
                     <div className="cart-text">Cart</div>
-                </a>
+                </Link>
             </div>
         </div>
     )
