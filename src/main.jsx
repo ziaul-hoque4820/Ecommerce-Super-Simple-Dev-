@@ -7,6 +7,7 @@ import Home from './pages/Home.jsx'
 import Checkout from './pages/Checkout.jsx'
 import Orders from './pages/Orders.jsx'
 import Traking from './pages/Traking.jsx'
+import ErrorPage from './components/ErrorPage.jsx'
 
 const router = createBrowserRouter([
     {
@@ -17,7 +18,8 @@ const router = createBrowserRouter([
             { path: "/home", element: <Home /> },
             { path: "/checkout", element: <Checkout /> },
             { path: "/orders", element: <Orders /> },
-            { path: "/traking", element: <Traking /> }
+            { path: "/traking", element: <Traking /> },
+            { path: "*", element: <ErrorPage /> }
         ]
     }
 ])
