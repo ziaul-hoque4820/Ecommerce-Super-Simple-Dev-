@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { formatCurrency, getProductImageUrl } from '../utils/utils'
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js'
 import { deliveryOptions } from '../data/deliveryOptions'
+import { ProductContext } from '../context/productContext';
 
-function CartItem({ onMatchingProduct, cartItem, onUpdateDelivery }) {
+function CartItem({ onMatchingProduct, cartItem }) {
+    const { cartData, setCartData } = useContext(ProductContext);
     const [selectedOption, setSelectedOption] = useState(cartItem.deliveryOptionId || "1");
 
     const currentDelivery = deliveryOptions.find(opt => opt.id === selectedOption);
@@ -13,11 +15,25 @@ function CartItem({ onMatchingProduct, cartItem, onUpdateDelivery }) {
     const deliveryDate = today.add(currentDelivery.deliveryDays, 'days');
     const dateString = deliveryDate.format('dddd, MMMM D');
 
+    // Change Shippeing Option 
     const handleOptionChange = (e) => {
         const newOptionId = e.target.value;
         setSelectedOption(newOptionId);
-        onUpdateDelivery(cartItem.productId, newOptionId);
-    }
+        handleUpdateDelivery(cartItem.productId, newOptionId);
+    };
+
+    // Updated delivery option 
+    const handleUpdateDelivery = (productId, newOptionId) => {
+        const updateCart = cartData.map(item =>
+            item.productId === productId
+                ? { ...item, deliveryOptionId: newOptionId }
+                : item
+        );
+
+        setCartData(updateCart);
+    };
+
+
 
     return (
         <div className="cart-item-container">
@@ -64,7 +80,7 @@ function CartItem({ onMatchingProduct, cartItem, onUpdateDelivery }) {
                                 : `$${formatCurrency(option.priceCents)} - Shipping`;
 
                             return (
-                                <div className="delivery-option">
+                                <div key={option.id} className="delivery-option">
                                     <input type="radio"
                                         className="delivery-option-input"
                                         name={`delivery-option-${cartItem.productId}`}
