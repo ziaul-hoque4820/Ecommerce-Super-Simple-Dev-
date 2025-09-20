@@ -33,6 +33,12 @@ function CartItem({ onMatchingProduct, cartItem }) {
         setCartData(updateCart);
     };
 
+    // Delete product cart item
+    const handleDeleteItem = (productId) => {
+        const updatedCart = cartData.filter(item => item.productId !== productId);
+        setCartData(updatedCart);
+    }
+
 
 
     return (
@@ -59,7 +65,9 @@ function CartItem({ onMatchingProduct, cartItem }) {
                         <span className="update-quantity-link link-primary">
                             Update
                         </span>
-                        <span className="delete-quantity-link link-primary">
+                        <span
+                        onClick={() => handleDeleteItem(cartItem.productId)}
+                        className="delete-quantity-link link-primary">
                             Delete
                         </span>
                     </div>
