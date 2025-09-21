@@ -8,6 +8,10 @@ function CartItem({ onMatchingProduct, cartItem }) {
     const { cartData, setCartData } = useContext(ProductContext);
     const [selectedOption, setSelectedOption] = useState(cartItem.deliveryOptionId || "1");
 
+    // state for Update quantity 
+    const [isEditing, setIsEditing] = useState(false);
+    const [newQuantity, setNewQuantity] = useState(cartItem.quantity);
+
     const currentDelivery = deliveryOptions.find(opt => opt.id === selectedOption);
 
     // Today's date and delivery date 
@@ -37,6 +41,18 @@ function CartItem({ onMatchingProduct, cartItem }) {
     const handleDeleteItem = (productId) => {
         const updatedCart = cartData.filter(item => item.productId !== productId);
         setCartData(updatedCart);
+    };
+
+    const handleSaveQuantity = (productId) => {
+        if (newQuantity < 1) return;
+        const updateCart = cartData.map(item =>
+            item.productId === productId
+                ? { ...item, quantity: Number(newQuantity) }
+                : item
+        );
+
+        setCartData(updateCart);
+        setIsEditing(false);
     }
 
 
@@ -62,15 +78,38 @@ function CartItem({ onMatchingProduct, cartItem }) {
                         <span>
                             Quantity: <span className="quantity-label">{cartItem.quantity}</span>
                         </span>
-                        <span className="update-quantity-link link-primary">
-                            Update
-                        </span>
-                        <span
-                        onClick={() => handleDeleteItem(cartItem.productId)}
-                        className="delete-quantity-link link-primary">
-                            Delete
-                        </span>
+
+                        {isEditing ? (
+                            <>
+                                <input
+                                    type="number"
+                                    value={newQuantity}
+                                    min="1"
+                                    onChange={(e) => setNewQuantity(e.target.value)}
+                                    style={{ width: "40px", margin: "0 8px" }}
+                                />
+                                <button onClick={() => handleSaveQuantity(cartItem.productId)}>
+                                    Save
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <span
+                                    onClick={() => setIsEditing(true)}
+                                    className="update-quantity-link link-primary"
+                                >
+                                    Update
+                                </span>
+                                <span
+                                    onClick={() => handleDeleteItem(cartItem.productId)}
+                                    className="delete-quantity-link link-primary"
+                                >
+                                    Delete
+                                </span>
+                            </>
+                        )}
                     </div>
+
                 </div>
 
                 <div className="delivery-options">
