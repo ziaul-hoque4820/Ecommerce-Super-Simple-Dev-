@@ -1,12 +1,14 @@
 import React from 'react'
+import { getProductImageUrl } from '../utils/utils'
+import { Link } from 'react-router-dom'
 
 function Traking() {
     return (
         <div className="tracking-page">
             <div className="order-tracking">
-                <a className="back-to-orders-link link-primary" href="orders.html">
+                <Link className="back-to-orders-link link-primary" to={"/orders"}>
                     View all orders
-                </a>
+                </Link>
 
                 <div className="delivery-date">
                     Arriving on Monday, June 13
@@ -20,7 +22,7 @@ function Traking() {
                     Quantity: 1
                 </div>
 
-                <img className="product-image" src="images/products/athletic-cotton-socks-6-pairs.jpg" />
+                <img className="product-image" src={getProductImageUrl("athletic-cotton-socks-6-pairs.jpg")} />
 
                 <div className="progress-labels-container">
                     <div className="progress-label">
